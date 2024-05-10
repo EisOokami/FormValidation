@@ -1,14 +1,9 @@
-const validateForm = (e, input, validationContainer, inputType, errorType, form, modal, passwordValue = "") => {
-    e.preventDefault();
-
-    const showModalMessage = (message, container) => {
+const validateFormFirst = (e, input, validationContainer, inputType, errorType, form, modalContainer, passwordValue = "") => {
+    const showModalMessage = (message, container, modal) => {
         modal.classList.add("modal");
         modal.classList.remove("hidden");
 
-        console.log(modal);
-
         const iconPosition = container.getBoundingClientRect();
-
         modal.style.left = `${iconPosition.right}px`;
         modal.style.top = `${window.scrollY + iconPosition.top - 10}px`;
 
@@ -16,11 +11,12 @@ const validateForm = (e, input, validationContainer, inputType, errorType, form,
         document.body.append(modal);
     };
 
-    const hideModalMessage = () => {
+    const hideModalMessage = (modal) => {
         modal.classList.add("hidden");
     };
 
     const showInlineMessage = (message, container) => {
+        checkValidate = false;
         container.classList.remove("hidden");
         container.classList.add("err-inline");
 
@@ -31,15 +27,16 @@ const validateForm = (e, input, validationContainer, inputType, errorType, form,
         input.style.borderBottom =  "4px #ff0000 solid";
     };
 
-    const showAbsoluteMessage = (message, container) => {
+    const showAbsoluteMessage = (message, container, modal = modalContainer) => {
+        checkValidate = false;
         container.classList.remove("hidden");
         container.classList.add("err-absolute");
 
         container.addEventListener("mouseover", () => {
-            showModalMessage(message, container);
+            showModalMessage(message, container, modal);
         });
         container.addEventListener("mouseout", () => {
-            hideModalMessage();
+            hideModalMessage(modal);
         });
 
         input.style.border =  "2px #ff0000 solid";
@@ -73,8 +70,8 @@ const validateForm = (e, input, validationContainer, inputType, errorType, form,
             return;
         }
 
-        if (value.length > 254) {
-            func("Password should be at most 254 characters long", container);
+        if (value.length > 255) {
+            func("Password should be at most 255 characters long", container);
             return;
         }
     
@@ -84,26 +81,31 @@ const validateForm = (e, input, validationContainer, inputType, errorType, form,
         }
     
         const params = [
-            {reg: /[0-9]/g, element: "Should contain at least one digit"},
-            {reg: /[a-z]/g, element: "Should contain at least one lowercase letter"},
-            {reg: /[A-Z]/g, element: "Should contain at least one uppercase letter"},
-            {reg: /[^A-Za-z0-9\s]/g, element: "Should contain at least one special character"},
+            {reg: /[0-9]/g, message: "Should contain at least one digit"},
+            {reg: /[a-z]/g, message: "Should contain at least one lowercase letter"},
+            {reg: /[A-Z]/g, message: "Should contain at least one uppercase letter"},
+            {reg: /[^A-Za-z0-9\s]/g, message: "Should contain at least one special character"},
         ];
     
         params.forEach(obj => {
-            const {reg, element} = obj;
+            const {reg, message} = obj;
     
             if (!reg.test(value)) {
-                func(element, container);
+                func(message, container);
             }
         });
     };
     
     const validateConfirmPassword = (value, passwordValue, container, func) => {
-        if (value !== passwordValue) {
+        if (value !== passwordValue || passwordValue.length < 8) {
             func("Passwords do not match", container);
         }
     };
+
+    // ==============================================
+
+    const showErrorMessage = errorType === "absolute" ? showAbsoluteMessage : showInlineMessage;
+    let checkValidate = true;
 
     if (!validationContainer.parentNode) {
         validationContainer.classList.add("hidden");
@@ -115,36 +117,26 @@ const validateForm = (e, input, validationContainer, inputType, errorType, form,
 
     input.style.border = "2px green solid";
 
-    let funcName = null;
-
-    switch(errorType) {
-        case "inline":
-            funcName = showInlineMessage;
-            break;
-        case "absolute":
-            funcName = showAbsoluteMessage;
-            break;
-        default:
-            funcName = showInlineMessage;
-            break;
-    }
-
     switch(inputType) {
         case "username":
-            validateUsername(input.value, validationContainer, funcName);
+            validateUsername(input.value, validationContainer, showErrorMessage);
             break;
         case "email":
-            validateEmail(input.value, validationContainer, funcName);
+            validateEmail(input.value, validationContainer, showErrorMessage);
             break;
         case "password":
-            validatePassword(input.value, validationContainer, funcName);
+            validatePassword(input.value, validationContainer, showErrorMessage);
             break;
         case "confirm-password":
-            validateConfirmPassword(input.value, passwordValue, validationContainer, funcName);
+            validateConfirmPassword(input.value, passwordValue, validationContainer, showErrorMessage);
             break;
         default:
             showInlineMessage("Unknown input type", validationContainer);
             break;
+    }
+
+    if (!checkValidate) {
+        e.preventDefault();
     }
 }
 
@@ -165,8 +157,8 @@ const passwordModalContainer = document.createElement("div");
 const confirmPasswordModalContainer = document.createElement("div");
 
 form.addEventListener("submit", (e) => {
-    validateForm(e, usernameInput, usernameValidationContainer, "username", "absolute", form, usernameModalContainer);
-    validateForm(e, emailInput, emailValidationContainer, "email", "absolute", form, emailModalContainer);
-    validateForm(e, passwordInput, passwordValidationContainer, "password", "absolute", form, passwordModalContainer);
-    validateForm(e, confirmPasswordInput, confirmPasswordValidationContainer, "confirm-password", "absolute", form, confirmPasswordModalContainer, passwordInput.value);
+    validateFormFirst(e, usernameInput, usernameValidationContainer, "username", "inline", form, usernameModalContainer);
+    validateFormFirst(e, emailInput, emailValidationContainer, "email", "inline", form, emailModalContainer);
+    validateFormFirst(e, passwordInput, passwordValidationContainer, "password", "absolute", form, passwordModalContainer);
+    validateFormFirst(e, confirmPasswordInput, confirmPasswordValidationContainer, "confirm-password", "absolute", form, confirmPasswordModalContainer, passwordInput.value);
 });

@@ -14,7 +14,7 @@ body {
 
 .row {
     padding: 100px;
-    width: 50vw;
+    width: 30vw;
     background-color: #fff;
     border: 1px #000 solid;
     border-radius: 10px;
@@ -23,7 +23,6 @@ body {
         position: relative;
         display: grid;
         gap: 20px;
-        width: inherit;
     
         .col {
             position: relative;
@@ -76,7 +75,7 @@ body {
     }
 }
 
-.modal {
+.modal-all, .modal {
     position: absolute;
     padding: 10px 15px;
     background: #fefefe;
@@ -87,4 +86,12 @@ body {
 
 .hidden {
     display: none;
+}
+
+.site {
+    position: absolute;
+    padding: 50px;
+    bottom: 0;
+    right: 0;
+    font-weight: 700;
 }
