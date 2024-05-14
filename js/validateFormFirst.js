@@ -31,6 +31,8 @@ const validateFormFirst = (e, input, validationContainer, inputType, errorType, 
         checkValidate = false;
         container.classList.remove("hidden");
         container.classList.add("err-absolute");
+        
+        hideModalMessage(modal);
 
         container.addEventListener("mouseover", () => {
             showModalMessage(message, container, modal);
