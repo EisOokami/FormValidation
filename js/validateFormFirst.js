@@ -43,12 +43,47 @@ const validateFormFirst = (e, input, validationContainer, inputType, errorType, 
         input.style.borderBottom =  "4px #ff0000 solid";
     };
 
-    const validateUsername = (value, container, func) => {
-        const stringRegex = /^[A-Za-z][A-Za-z0-9_]{4,29}$/;
-
-        if (!stringRegex.test(value)) {
-            func("Invalid username", container);
+    const simpleValidation = (min = 1, max = 255, value, container, func) => {
+        if (value.trim() === "") {
+            func("Empty input", container);
+            return;
         }
+
+        if (value.length < min) {
+            func(`Password should be at least ${min} characters long`, container);
+            return;
+        }
+
+        if (value.length > max) {
+            func(`Password should be at most ${max} characters long`, container);
+            return;
+        }
+
+        if (/\s/.test(value)) {
+            func("Spaces are not allowed", container);
+            return;
+        }
+
+        return true;
+    };
+
+    const validateUsername = (value, container, func) => {
+        if (!simpleValidation(4, 29, value, container, func)) {
+            return;
+        }
+
+        const params = [
+            {reg: /[0-9]/g, message: "Should contain at least one digit"},
+            {reg: /[A-Za-z]/g, message: "Should contain at least one letter"},
+        ];
+
+        params.forEach(obj => {
+            const {reg, message} = obj;
+    
+            if (!reg.test(value)) {
+                func(message, container);
+            }
+        });
     }
 
     const validateEmail = (value, container, func) => {
@@ -60,23 +95,7 @@ const validateFormFirst = (e, input, validationContainer, inputType, errorType, 
     };
     
     const validatePassword = (value, container, func) => {
-        if (value.trim() === "") {
-            func("Empty input", container);
-            return;
-        }
-    
-        if (value.length < 8) {
-            func("Password should be at least 8 characters long", container);
-            return;
-        }
-
-        if (value.length > 255) {
-            func("Password should be at most 255 characters long", container);
-            return;
-        }
-    
-        if (/\s/.test(value)) {
-            func("Spaces are not allowed", container);
+        if (!simpleValidation(8, 255, value, container, func)) {
             return;
         }
     

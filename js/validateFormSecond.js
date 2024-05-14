@@ -65,12 +65,47 @@ const validateFormSecond = (e, errorType) => {
         input.style.borderBottom =  "4px #ff0000 solid";
     };
 
-    const validateUsername = (value, container, func, input, modalContainer) => {
-        const stringRegex = /^[A-Za-z][A-Za-z0-9_]{4,29}$/;
-
-        if (!stringRegex.test(value)) {
-            func("Invalid username", container, input, modalContainer);
+    const simpleValidation = (min = 1, max = 255, value, container, func, input, modalContainer) => {
+        if (value.trim() === "") {
+            func("Empty input", container, input, modalContainer);
+            return;
         }
+
+        if (value.length < min) {
+            func(`Password should be at least ${min} characters long`, container, input, modalContainer);
+            return;
+        }
+
+        if (value.length > max) {
+            func(`Password should be at most ${max} characters long`, container, input, modalContainer);
+            return;
+        }
+
+        if (/\s/.test(value)) {
+            func("Spaces are not allowed", container, input, modalContainer);
+            return;
+        }
+
+        return true;
+    };
+
+    const validateUsername = (value, container, func, input, modalContainer) => {
+        if (!simpleValidation(4, 29, value, container, func, input, modalContainer)) {
+            return;
+        }
+
+        const params = [
+            {reg: /[0-9]/g, message: "Should contain at least one digit"},
+            {reg: /[A-Za-z]/g, message: "Should contain at least one letter"},
+        ];
+    
+        params.forEach(obj => {
+            const {reg, message} = obj;
+    
+            if (!reg.test(value)) {
+                func(message, container, input, modalContainer);
+            }
+        });
     }
 
     const validateEmail = (value, container, func, input, modalContainer) => {
@@ -82,23 +117,7 @@ const validateFormSecond = (e, errorType) => {
     };
     
     const validatePassword = (value, container, func, input, modalContainer) => {
-        if (value.trim() === "") {
-            func("Empty input", container, input, modalContainer);
-            return;
-        }
-    
-        if (value.length < 8) {
-            func("Password should be at least 8 characters long", container, input, modalContainer);
-            return;
-        }
-
-        if (value.length > 255) {
-            func("Password should be at most 255 characters long", container, input, modalContainer);
-            return;
-        }
-    
-        if (/\s/.test(value)) {
-            func("Spaces are not allowed", container, input, modalContainer);
+        if (!simpleValidation(8, 255, value, container, func, input, modalContainer)) {
             return;
         }
     
