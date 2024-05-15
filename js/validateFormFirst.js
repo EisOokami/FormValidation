@@ -1,4 +1,4 @@
-const validateFormFirst = (e, input, validationContainer, inputType, errorType, form, modalContainer, passwordValue = "") => {
+const validateFormFirst = (e, input, validationContainer, inputType, errorType, form, modalContainer, checkValue = "") => {
     const showModalMessage = (message, container, modal) => {
         modal.classList.add("modal");
         modal.classList.remove("hidden");
@@ -96,25 +96,32 @@ const validateFormFirst = (e, input, validationContainer, inputType, errorType, 
         }
     };
     
-    const validatePassword = (value, container, func) => {
-        if (!simpleValidation(8, 255, value, container, func)) {
-            return;
-        }
-    
+    const validatePassword = (value, usernameValue, container, func) => {
+        const regExp = new RegExp(`${usernameValue}`, "g")
+        // emoji, special character in gboard
         const params = [
             {reg: /[0-9]/g, message: "Should contain at least one digit"},
             {reg: /[a-z]/g, message: "Should contain at least one lowercase letter"},
             {reg: /[A-Z]/g, message: "Should contain at least one uppercase letter"},
             {reg: /[^A-Za-z0-9\s]/g, message: "Should contain at least one special character"},
         ];
-    
+
+        if (!regExp.test(value)) {
+            func("Password contain a username", container);
+            return;
+        }
+
         params.forEach(obj => {
             const {reg, message} = obj;
-    
+            
             if (!reg.test(value)) {
                 func(message, container);
             }
         });
+
+        if (!simpleValidation(8, 255, value, container, func)) {
+            return;
+        }
     };
     
     const validateConfirmPassword = (value, passwordValue, container, func) => {
@@ -146,10 +153,10 @@ const validateFormFirst = (e, input, validationContainer, inputType, errorType, 
             validateEmail(input.value, validationContainer, showErrorMessage);
             break;
         case "password":
-            validatePassword(input.value, validationContainer, showErrorMessage);
+            validatePassword(input.value, checkValue, validationContainer, showErrorMessage);
             break;
         case "confirm-password":
-            validateConfirmPassword(input.value, passwordValue, validationContainer, showErrorMessage);
+            validateConfirmPassword(input.value, checkValue, validationContainer, showErrorMessage);
             break;
         default:
             showInlineMessage("Unknown input type", validationContainer);
@@ -180,6 +187,6 @@ const confirmPasswordModalContainer = document.createElement("div");
 form.addEventListener("submit", (e) => {
     validateFormFirst(e, usernameInput, usernameValidationContainer, "username", "inline", form, usernameModalContainer);
     validateFormFirst(e, emailInput, emailValidationContainer, "email", "inline", form, emailModalContainer);
-    validateFormFirst(e, passwordInput, passwordValidationContainer, "password", "absolute", form, passwordModalContainer);
+    validateFormFirst(e, passwordInput, passwordValidationContainer, "password", "absolute", form, passwordModalContainer, usernameInput.value);
     validateFormFirst(e, confirmPasswordInput, confirmPasswordValidationContainer, "confirm-password", "absolute", form, confirmPasswordModalContainer, passwordInput.value);
 });
