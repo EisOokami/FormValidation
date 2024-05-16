@@ -9,16 +9,22 @@ body {
   display: grid;
   place-items: center;
   height: 100vh;
-  background-color: #fafafa;
+  background-image: url("../svg/circle-scatter-haikei.svg");
   box-sizing: border-box;
+  -webkit-backdrop-filter: blur(7px);
+          backdrop-filter: blur(7px);
 }
 
 .row {
-  padding: 100px;
-  width: 30vw;
+  display: grid;
+  padding: 65px 80px;
+  width: 40vh;
   background-color: #fff;
-  border: 1px #000 solid;
-  border-radius: 10px;
+  box-shadow: 0px 0px 19px -6px rgb(66, 68, 90);
+}
+.row h1 {
+  justify-self: center;
+  margin-bottom: 40px;
 }
 .row form {
   position: relative;
@@ -69,7 +75,7 @@ body {
   transition: background 0.5s ease;
 }
 .row form .submit-btn:hover {
-  background-color: #fafafa;
+  background-color: #d3d3d3;
   transition: background 0.5s ease;
 }
 
@@ -81,7 +87,7 @@ body {
   border-radius: 5px;
   border-bottom-right-radius: 1.5px;
   font-weight: 600;
-  opacity: 0.8;
+  opacity: 0.9;
   z-index: 9999;
 }
 .modal-all::after, .modal::after {
@@ -183,6 +189,7 @@ body {
 @media screen and (max-width: 1024px) {
   .row {
     padding: 60px;
+    width: 55vh;
   }
 }
 @media screen and (max-width: 768px) {
