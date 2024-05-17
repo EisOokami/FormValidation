@@ -5,8 +5,18 @@ const validateFormSecond = (e) => {
 
     const addErrorContainerForFormElements = (formNode) => {
         formNode.forEach((element) => {
-            if ((element.type === "password" || element.type === "text" || element.type === "email") && element.nextElementSibling === null) {
-                element.insertAdjacentHTML("afterend", "<div class='hidden err-all'></div>");
+            if (element.type === "password" || element.type === "text" || element.type === "email") {
+                let checkErrorElement = true;
+
+                for (let i = 0; i < element.parentElement.children.length; i++) {
+                    if (element.parentElement.children[i].classList.contains("err-all")) {
+                        checkErrorElement = false;
+                    }
+                }
+
+                if (checkErrorElement) {
+                    element.insertAdjacentHTML("afterend", "<div class='hidden err-all'></div>");
+                }
             }
         });
     };
@@ -60,7 +70,7 @@ const validateFormSecond = (e) => {
         }
     }
 
-    const showModalMessage = (message, container, modalContainer) => {
+    const showModalMessage = (message, modalContainer) => {
         modalContainer.classList.remove("hidden");
 
         modalContainer.style.top = `${window.scrollY - modalContainer.offsetHeight - 10}px`;
@@ -93,7 +103,7 @@ const validateFormSecond = (e) => {
         hideModalMessage(modalContainer);
 
         container.addEventListener("mouseover", () => {
-            showModalMessage(message, container, modalContainer);
+            showModalMessage(message, modalContainer);
         });
         container.addEventListener("mouseout", () => {
             hideModalMessage(modalContainer);
@@ -246,6 +256,7 @@ const validateFormSecond = (e) => {
     const validationContainers = [...e.target.querySelectorAll(".err-all")];
     const modalContainers = [...document.querySelectorAll(".modal-all")];
     const infoContainers = [...e.target.querySelectorAll(".err-absolute")];
+    console.log(validationContainers)
 
     for (let index = 0; index < data.length; index++) {
         const [inputType, inputValue] = data[index];
@@ -287,6 +298,5 @@ const validateFormSecond = (e) => {
 const form = document.querySelector("form");
 
 form.addEventListener("submit", (e) => {
-    // e.preventDefault();
     validateFormSecond(e);
 });
