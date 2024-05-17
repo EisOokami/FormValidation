@@ -90,7 +90,7 @@ const validateFormSecond = (e) => {
 
         switch(input.type) {
             case "password":
-                message = "Requires at least one uppercase letter, one lowercase letter, one digit, and one special character. Minimum 8 characters required"
+                message = "Requires at least one uppercase letter, one lowercase letter, one digit, and one special character. Minimum 20 characters required"
                 break;
             case "text":
                 message = "4-29 characters required. Must contain at least one letter"
@@ -215,7 +215,7 @@ const validateFormSecond = (e) => {
             return;
         }
 
-        if (!simpleValidation(8, 255, value, container, input, modalContainer, infoContainer, progressElement)) {
+        if (!simpleValidation(20, 255, value, container, input, modalContainer, infoContainer, progressElement)) {
             return;
         }
     
@@ -256,7 +256,6 @@ const validateFormSecond = (e) => {
     const validationContainers = [...e.target.querySelectorAll(".err-all")];
     const modalContainers = [...document.querySelectorAll(".modal-all")];
     const infoContainers = [...e.target.querySelectorAll(".err-absolute")];
-    console.log(validationContainers)
 
     for (let index = 0; index < data.length; index++) {
         const [inputType, inputValue] = data[index];
