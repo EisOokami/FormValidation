@@ -190,16 +190,6 @@ const validateForm = (e) => {
             {reg: /[a-z]/g, message: "Should contain at least one lowercase letter"},
         ];
 
-        // const response = await fetch("../json/pass.json");
-        // const json = await response.json();
-        // const popularPasswords = Object.values(json);
-
-        // if (popularPasswords.includes(value)) {
-        //     isForm ? (input.isValid = false) : showInlineMessage("This password is commonly used", container, input, modalContainer, infoContainer);
-        //     isForm ? (input.isValid = false) : strengthIndicatorPassword(progressElement, 25);
-        //     return;
-        // }
-
         if (value.includes(usernameValue) && usernameValue) {
             isForm ? (input.isValid = false) : showInlineMessage("Password contain a username", container, input, modalContainer, infoContainer);
             isForm ? (input.isValid = false) : strengthIndicatorPassword(progressElement, 50);

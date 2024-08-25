@@ -75,7 +75,7 @@ A toggle button is added next to the password fields to allow users to switch be
 
 1. Clone the repository.
 2. Ensure you have a `style.css` file in the `css` directory for styling.
-3. Include the `validateFormThird.js` script in the `js` directory for validation logic.
+3. Include the `validateForm.js` script in the `js` directory for validation logic.
 4. Customize the validation messages and criteria as needed.
 
 ## Contributing
@@ -92,4 +92,4 @@ For any questions or feedback, please reach out to the project maintainer.
 
 ---
 
-Thank you for visiting the Tourist Interactive Map project! I hope this tool will help you in protecting your form. If you have any questions or feedback, please feel free to open an issue or contribute to the project. Happy protection!
+Thank you for visiting the Form Validation project! I hope this tool will help you in protecting your form. If you have any questions or feedback, please feel free to open an issue or contribute to the project. Happy protection!
