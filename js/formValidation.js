@@ -1,10 +1,10 @@
-const validateForm = (e) => {
+const formValidation = (e) => {
     const serializeForm = (formNode) => {
         return new FormData(formNode);
     };
 
     const addErrorContainerForFormElements = (inputElement) => {
-        if (inputElement.type === "password" || inputElement.type === "text" || inputElement.type === "email") {
+        if (inputElement.type === "password" || inputElement.type === "text" || inputElement.type === "email" || inputElement.type === "tel") {
             let checkErrorElement = true;
 
             for (let i = 0; i < inputElement.parentElement.children.length; i++) {
@@ -24,7 +24,7 @@ const validateForm = (e) => {
         modalElement.classList.add("hidden", "modal-all", `modal-${inputElement.name}`);
         modalElement.id = `modal-${inputElement.name}`;
 
-        if ((inputElement.type === "password" || inputElement.type === "text" || inputElement.type === "email") && !document.getElementById(`modal-${inputElement.name}`)) {
+        if ((inputElement.type === "password" || inputElement.type === "text" || inputElement.type === "email" || inputElement.type === "tel") && !document.getElementById(`modal-${inputElement.name}`)) {
             inputElement.insertAdjacentHTML("afterend", `<div class="hidden err-absolute err-absolute-${inputElement.name}"></div>`);
             inputElement.insertAdjacentElement("afterend", modalElement);
         }
@@ -89,6 +89,9 @@ const validateForm = (e) => {
                 break;
             case "email":
                 message = "Ensure a valid email format (e.g., example@example.com)"
+                break;
+            case "tel":
+                message = "Enter a valid phone number in international format (e.g., +1234567890)";
                 break;
         }
 
@@ -181,6 +184,19 @@ const validateForm = (e) => {
             isForm ? (input.isValid = false) : showInlineMessage("Invalid email address", container, input, modalContainer, infoContainer);
         }
     };
+
+    const validatePhone = (value, container, input, modalContainer, infoContainer, isForm) => {
+        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    
+        if (!simpleValidation(10, 15, value, container, input, modalContainer, infoContainer, "", isForm)) {
+            return;
+        }
+    
+        if (!phoneRegex.test(value)) {
+            isForm ? (input.isValid = false) : showInlineMessage("Invalid phone number", container, input, modalContainer, infoContainer);
+        }
+    };
+    
     
     const validatePassword = async (value, usernameValue, container, input, modalContainer, progressElement, infoContainer, isForm) => {
         const params = [
@@ -217,7 +233,22 @@ const validateForm = (e) => {
     };
 
     const strengthIndicatorPassword = (progressElement, progress) => {
+        progressElement.classList.remove("progress-red")
+        progressElement.classList.remove("progress-orange")
+        progressElement.classList.remove("progress-yellow")
+        progressElement.classList.remove("progress-green")
+
         progressElement.value = progress;
+
+        if (progress === 25) {
+            progressElement.classList.add("progress-red")
+        } else if (progress === 50) {
+            progressElement.classList.add("progress-orange")
+        } else if (progress === 75) {
+            progressElement.classList.add("progress-yellow")
+        } else {
+            progressElement.classList.add("progress-green")
+        }
     };
 
     // ==============================================
@@ -242,6 +273,9 @@ const validateForm = (e) => {
                 case "email":
                     validateEmail(inputValue, "", input, "", "", true);
                     break;
+                case "tel":
+                    validatePhone(inputValue, "", input, "", "", true);
+                    break;                    
                 case "password":
                     checkPassValue = inputValue;
                     validatePassword(inputValue, checkUsername, "", input, "", "", "", true);
@@ -292,6 +326,9 @@ const validateForm = (e) => {
         case "email":
             validateEmail(e.target.value, validationContainer, e.target, modalContainer, infoContainer, false);
             break;
+        case "tel":
+            validatePhone(e.target.value, validationContainer, e.target, modalContainer, infoContainer, false);
+            break;
         case "password":
             validatePassword(e.target.value, checkUsername, validationContainer, e.target, modalContainer, progressElement, infoContainer, false);
             break;
@@ -304,9 +341,9 @@ const validateForm = (e) => {
 const form = document.querySelector("form");
 
 form.addEventListener("input", (e) => {
-    validateForm(e);
+    formValidation(e);
 });
 
 form.addEventListener("submit", (e) => {
-    validateForm(e);
+    formValidation(e);
 });

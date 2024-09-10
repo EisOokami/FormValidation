@@ -9,10 +9,7 @@ body {
   display: grid;
   place-items: center;
   height: 100vh;
-  background-image: url("../svg/circle-scatter-haikei.svg");
   box-sizing: border-box;
-  -webkit-backdrop-filter: blur(7px);
-          backdrop-filter: blur(7px);
 }
 
 .row {
@@ -21,6 +18,7 @@ body {
   width: 40vh;
   background-color: #fff;
   box-shadow: 0px 0px 19px -6px rgb(66, 68, 90);
+  border-radius: 10px;
 }
 .row h1 {
   justify-self: center;
@@ -125,20 +123,12 @@ body {
 }
 
 .progress-all[value] {
-  --color: linear-gradient(#ff0000 0 0) 0 /calc(35vw*.26 - 100%) 1px,
-  linear-gradient(#ffa500 0 0) 0 /calc(35vw*.51 - 100%) 1px,
-  linear-gradient(#ffff00 0 0) 0 /calc(35vw*.76 - 100%) 1px,
-  linear-gradient(#008000 0 0) 0 /calc(35vw*99 - 100%) 1px;
   margin: 5px 0 2px;
   width: inherit;
   height: 5px;
-  color: var(--color);
   background-color: #d3d3d3;
   border: none;
   border-radius: 10px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
 }
 .progress-all[value]::-webkit-progress-bar {
   border-radius: 10px;
@@ -146,30 +136,35 @@ body {
 }
 .progress-all[value]::-webkit-progress-value {
   border-radius: 10px;
-  background: var(--color);
-  -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease;
+}
+.progress-all[value].progress-red::-webkit-progress-value {
+  background-color: #ff0000;
+}
+.progress-all[value].progress-orange::-webkit-progress-value {
+  background-color: #ffa500;
+}
+.progress-all[value].progress-yellow::-webkit-progress-value {
+  background-color: #ffff00;
+}
+.progress-all[value].progress-green::-webkit-progress-value {
+  background-color: #008000;
 }
 .progress-all[value]::-moz-progress-bar {
   border-radius: 10px;
-  background: var(--color);
-  -moz-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
-
-.progress-all[value]::-webkit-progress-bar {
-  border-radius: 10px;
-  background: #d3d3d3;
+.progress-all[value].progress-red::-moz-progress-value {
+  background-color: #ff0000;
 }
-
-.progress-all[value]::-webkit-progress-value {
-  border-radius: 10px;
-  background: var(--color);
+.progress-all[value].progress-orange::-moz-progress-value {
+  background-color: #ffa500;
 }
-
-.progress-all[value]::-moz-progress-bar {
-  border-radius: 10px;
-  background: var(--color);
+.progress-all[value].progress-yellow::-moz-progress-value {
+  background-color: #ffff00;
+}
+.progress-all[value].progress-green::-moz-progress-value {
+  background-color: #008000;
 }
 
 .hidden {
@@ -202,10 +197,4 @@ body {
     padding: 30px 20px;
     border: 0;
   }
-  .progress-all[value] {
-    --color: linear-gradient(#ff0000 0 0) 0 /calc(90vw*.26 - 100%) 1px,
-    linear-gradient(#ffa500 0 0) 0 /calc(90vw*.51 - 100%) 1px,
-    linear-gradient(#ffff00 0 0) 0 /calc(90vw*.76 - 100%) 1px,
-    linear-gradient(#008000 0 0) 0 /calc(90vw*99 - 100%) 1px;
-  }
-}/*# sourceMappingURL=style.css.map */
+}

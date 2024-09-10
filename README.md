@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project provides a comprehensive form validation system designed to ensure data integrity and enhance user experience. The main purpose of the project is to assist developers in implementing robust validation for form inputs, including username, email, and password fields. This validation framework is particularly useful for applications that require strict input criteria to prevent invalid data submissions.
+This project provides a comprehensive form validation system designed to ensure data integrity and enhance user experience. The main purpose of the project is to assist developers in implementing robust validation for form inputs, including username, email, password and phone number fields. This validation framework is particularly useful for applications that require strict input criteria to prevent invalid data submissions.
 
 ## Features
 
@@ -19,6 +19,11 @@ This project provides a comprehensive form validation system designed to ensure 
   - Minimum length of 20 characters.
   - Cannot contain spaces or the username.
   - Strength indicator to display password strength.
+
+- **Phone Number Validation**
+  - Validates the phone number against the international format.
+  - Length between 10 to 15 characters.
+  - Supports optional "+" at the beginning for international numbers.
 
 - **Confirm Password Validation**
   - Ensures the password and confirm password fields match.
@@ -47,7 +52,11 @@ The validation system operates by listening to form input events and validating 
    - Ensures the password does not contain the username.
    - Provides visual feedback on password strength.
 
-4. **Confirm Password Validation**
+4. **Phone Number Validation**
+   - Validates the phone number using a regular expression to match the international format.
+   - Ensures the length is within the acceptable range.
+
+5. **Confirm Password Validation**
    - Ensures the value matches the password field.
 
 ### Error Handling
@@ -65,7 +74,7 @@ A toggle button is added next to the password fields to allow users to switch be
 ## Usage
 
 1. **Form Structure**
-   - Include the necessary input fields for username, email, password, and confirm password.
+   - Include the necessary input fields for username, email, phone number, password and confirm password.
    - Add the `novalidate` attribute to the form to prevent default browser validation.
 
 2. **JavaScript Integration**
@@ -74,8 +83,8 @@ A toggle button is added next to the password fields to allow users to switch be
 ## Project Setup
 
 1. Clone the repository.
-2. Ensure you have a `style.css` file in the `css` directory for styling.
-3. Include the `validateForm.js` script in the `js` directory for validation logic.
+2. Ensure you have a `style.css`/`style.scss` file in the `css`/`scss` directory for styling.
+3. Include the `formValidation.js` script in the `js` directory for validation logic.
 4. Customize the validation messages and criteria as needed.
 
 ## Contributing
@@ -84,7 +93,7 @@ I welcome contributions to enhance this form validation system. If you find any 
 
 ## License
 
-This project is licensed under the GNU GENERAL PUBLIC LICENSE. See the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
 
