@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     var splide = new Splide(".splide", {
-        type: "fade",
+        type: "loop",
         // autoplay: true,
         arrows: false,
         pagination: "splide__pagination splide__pagination--custom",

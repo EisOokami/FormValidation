@@ -1,94 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+.form-validation__error--inline {
+    color: #ff0000;
+    font-weight: 500;
 
-* {
-    margin: 0;
-    font-family: "Montserrat", sans-serif;
-}
-
-body {
-    display: grid;
-    place-items: center;
-    height: 100vh;
-    box-sizing: border-box;
-}
-
-.row {
-    display: grid;
-    padding: 65px 80px;
-    width: 40vh;
-    background-color: #fff;
-    box-shadow: 0px 0px 19px -6px rgba(66, 68, 90, 1);
-    border-radius: 10px;
-
-    h1 {
-        justify-self: center;
-        margin-bottom: 40px;
-    }
-
-    form {
-        position: relative;
-        display: grid;
-        gap: 20px;
-
-        .col {
-            position: relative;
-            display: grid;
-
-            input {
-                position: relative;
-                padding: 5px 5px;
-                border: 1px #000 solid;
-                border-radius: 5px;
-                font-size: 18px;
-
-                &:focus {
-                    outline: 1px #ffff00 solid;
-                }
-            }
-        }
-
-        .err-inline {
-            color: #ff0000;
-            font-weight: 500;
-
-            &::before {
-                content: "ㅤ ";
-                background-image: url("../svg/alert-circle-red.svg");
-                background-repeat: no-repeat;
-            }
-        }
-
-        .err-absolute {
-            position: absolute;
-            top: -1px;
-            right: 0;
-            width: 20px;
-            height: 20px;
-            background-image: url("../svg/info.svg");
-            background-repeat: no-repeat;
-        }
-
-        .submit-btn {
-            justify-self: end;
-            margin-top: 25px;
-            padding: 10px 20px;
-            background-color: #fff;
-            border: 2px #000 solid;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            transition: background 0.5s ease;
-
-            &:hover {
-                background-color: #d3d3d3;
-                transition: background 0.5s ease;
-            }
-        }
+    &::before {
+        content: "ㅤ ";
+        background-image: url("../svg/alert-circle-red.svg");
+        background-repeat: no-repeat;
     }
 }
 
-.modal-all,
-.modal {
+.form-validation__error--absolute {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background-image: url("../svg/info.svg");
+    background-repeat: no-repeat;
+}
+
+.form-validation__tooltip--all,
+.form-validation__tooltip {
     position: absolute;
     right: 0;
     padding: 10px 15px;
@@ -114,7 +46,7 @@ body {
     }
 }
 
-.visibility-all {
+.form-validation__visibility--all {
     position: absolute;
     top: 25px;
     right: 5px;
@@ -124,7 +56,7 @@ body {
     z-index: 999;
 }
 
-.visibility-all-off {
+.form-validation__visibility--all--off {
     position: absolute;
     top: 25px;
     right: 5px;
@@ -134,7 +66,7 @@ body {
     z-index: 999;
 }
 
-.progress-all[value] {
+.form-validation__progress--all[value] {
     margin: 5px 0 2px;
     width: inherit;
     height: 5px;
@@ -152,19 +84,19 @@ body {
         transition: all 0.5s ease;
     }
 
-    &.progress-red::-webkit-progress-value {
+    &.form-validation__progress--red::-webkit-progress-value {
         background-color: #ff0000;
     }
 
-    &.progress-orange::-webkit-progress-value {
+    &.form-validation__progress--orange::-webkit-progress-value {
         background-color: #ffa500;
     }
 
-    &.progress-yellow::-webkit-progress-value {
+    &.form-validation__progress--yellow::-webkit-progress-value {
         background-color: #ffff00;
     }
 
-    &.progress-green::-webkit-progress-value {
+    &.form-validation__progress--green::-webkit-progress-value {
         background-color: #008000;
     }
 
@@ -173,23 +105,23 @@ body {
         transition: all 0.5s ease;
     }
 
-    &.progress-red::-moz-progress-value {
+    &.form-validation__progress--red::-moz-progress-value {
         background-color: #ff0000;
     }
 
-    &.progress-orange::-moz-progress-value {
+    &.form-validation__progress--orange::-moz-progress-value {
         background-color: #ffa500;
     }
 
-    &.progress-yellow::-moz-progress-value {
+    &.form-validation__progress--yellow::-moz-progress-value {
         background-color: #ffff00;
     }
 
-    &.progress-green::-moz-progress-value {
+    &.form-validation__progress--green::-moz-progress-value {
         background-color: #008000;
     }
 }
 
-.hidden {
+.form-validation__hidden {
     display: none;
 }
