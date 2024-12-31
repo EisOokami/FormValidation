@@ -1,3 +1,8 @@
+.form-validation__error--all {
+    display: flex;
+    align-items: center;
+}
+
 .form-validation__wrapper {
     position: relative;
 }
@@ -132,4 +137,46 @@
 
 .form-validation__hidden {
     display: none;
+}
+
+@media (max-width: 1200px) {
+    .form-validation__tooltip--all,
+    .form-validation__tooltip {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 992px) {
+    .form-validation__tooltip--all,
+    .form-validation__tooltip {
+        font-size: 15px;
+    }
+
+    .form-validation__visibility--all,
+    .form-validation__visibility--all--off {
+        top: 8px;
+    }
+
+    .form-validation__error--all {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-validation__tooltip--all,
+    .form-validation__tooltip {
+        font-size: 14px;
+    }
+
+    .form-validation__visibility--all,
+    .form-validation__visibility--all--off {
+        top: 6px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-validation__tooltip--all,
+    .form-validation__tooltip {
+        font-size: 13px;
+    }
 }
