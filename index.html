@@ -4,9 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Form Validation</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="css/form.css" />
-        <link rel="stylesheet" href="css/carusel.css" />
+        <link rel="stylesheet" href="css/formValidation.css" />
+        <link rel="stylesheet" href="css/carousel.css" />
 
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
@@ -14,35 +13,21 @@
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
         />
+
+        <style type="text/tailwindcss">
+            @layer utilities {
+                .form__inputs {
+                    @apply w-full p-1.5 md:p-2 lg:p-2.5 text-sm lg:text-base text-gray-900 bg-gray-50 border border-gray-300 focus:border-blue-500 outline-none rounded-lg focus:ring-blue-500 transition;
+                }
+
+                .form__links {
+                    @apply text-sm lg:text-base text-blue-500 hover:text-blue-600 underline transition cursor-not-allowed;
+                }
+            }
+        </style>
     </head>
     <body>
-        <!-- <div class="row">
-        <h1>Login</h1>
-        <form novalidate>
-            <div class="col">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" autofocus autocomplete="username">
-            </div>
-            <div class="col">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" autocomplete="email"> 
-            </div>
-            <div class="col">
-                <label for="tel">Phone Number</label>
-                <input type="tel" name="tel" id="tel" autocomplete="tel"> 
-            </div>
-            <div class="col">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" autocomplete="current-password">
-            </div>
-            <div class="col">
-                <label for="confirm-password">Confirm password</label>
-                <input type="password" name="confirm-password" id="confirm-password" autocomplete="current-password"> 
-            </div>
-            <input type="submit" value="Submit" class="submit-btn">
-        </form>
-    </div> -->
-        <main class="flex w-full h-full p-5">
+        <main class="flex w-full h-svh p-5">
             <section class="splide hidden md:block w-1/2" role="group">
                 <ul
                     class="splide__pagination splide__pagination--custom flex gap-1"
@@ -72,6 +57,107 @@
                         </li>
                     </ul>
                 </div>
+                <a
+                    href="#"
+                    class="absolute top-5 right-5 px-3 py-1 text-sm text-white bg-gray-50/20 rounded-xl cursor-not-allowed"
+                >
+                    Back to website ➜
+                </a>
+            </section>
+            <section
+                class="grid content-start gap-4 xl:gap-6 w-full md:w-1/2 p-8 sm:p-24 md:p-16 lg:p-20 xl:p-24 2xl:p-32"
+            >
+                <div
+                    class="grid sm:flex sm:justify-between sm:items-center gap-1 sm:gap-0"
+                >
+                    <div class="flex items-center gap-1">
+                        <img
+                            src="images/generallogoblue.png"
+                            alt="logo"
+                            class="w-7 lg:w-10"
+                        />
+                        <span
+                            class="text-base lg:text-lg text-[#0096FF] font-semibold"
+                            >Form Validation</span
+                        >
+                    </div>
+                    <a href="#" class="form__links">Learn more</a>
+                </div>
+                <h1 class="text-3xl lg:text-4xl xl:text-5xl">
+                    Create an account
+                </h1>
+                <p class="text-sm lg:text-base">
+                    Already have an account?
+                    <a href="#" class="form__links">Log in</a>
+                </p>
+                <form class="grid gap-3" novalidate>
+                    <div class="form-validation__wrapper">
+                        <input
+                            type="text"
+                            name="form-validation__username"
+                            autofocus
+                            autocomplete="username"
+                            class="form__inputs"
+                            placeholder="Username"
+                        />
+                    </div>
+                    <div class="form-validation__wrapper">
+                        <input
+                            type="email"
+                            name="form-validation__email"
+                            autocomplete="email"
+                            class="form__inputs"
+                            placeholder="Email"
+                        />
+                    </div>
+                    <div class="form-validation__wrapper">
+                        <input
+                            type="tel"
+                            name="form-validation__tel"
+                            autocomplete="tel"
+                            class="form__inputs"
+                            placeholder="Phone number"
+                        />
+                    </div>
+                    <div class="form-validation__wrapper">
+                        <input
+                            type="password"
+                            name="form-validation__password"
+                            autocomplete="current-password"
+                            class="form__inputs"
+                            placeholder="Enter your password"
+                        />
+                    </div>
+                    <div class="form-validation__wrapper">
+                        <input
+                            type="password"
+                            name="form-validation__password--confirm"
+                            autocomplete="current-password"
+                            class="form__inputs"
+                            placeholder="Confirm your password"
+                        />
+                    </div>
+                    <!-- <div class="flex items-center gap-1">
+                        <input
+                            type="checkbox"
+                            name="terms-and-conditions"
+                            id="terms-and-conditions"
+                        />
+                        <label for="terms-and-conditions"
+                            >I agree to the
+                            <a
+                                href="#"
+                                class="form__links"
+                                >Terms & Conditions</a
+                            ></label
+                        >
+                    </div> -->
+                    <input
+                        type="submit"
+                        value="Create account"
+                        class="mt-10 px-3 md:px-4 lg:px-5 py-2 lg:py-2.5 text-sm text-white font-medium bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 rounded-lg focus:outline-none transition"
+                    />
+                </form>
             </section>
         </main>
 

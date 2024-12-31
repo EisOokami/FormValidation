@@ -19,7 +19,7 @@ const formValidation = (e) => {
             ) {
                 if (
                     inputElement.parentElement.children[i].classList.contains(
-                        "form-validation__error--all",
+                        `form-validation__error--${inputElement.name}`,
                     )
                 ) {
                     checkErrorElement = false;
@@ -117,10 +117,6 @@ const formValidation = (e) => {
     const showTooltipMessage = (message, tooltipContainer) => {
         tooltipContainer.classList.remove("form-validation__hidden");
 
-        tooltipContainer.style.top = `${
-            window.scrollY - tooltipContainer.offsetHeight - 10
-        }px`;
-
         tooltipContainer.textContent = message;
     };
 
@@ -185,9 +181,6 @@ const formValidation = (e) => {
 
         container.textContent = message;
         container.style.width = `${input.offsetWidth}px`;
-
-        input.style.border = "2px #ff0000 solid";
-        input.style.borderBottom = "4px #ff0000 solid";
     };
 
     const simpleValidation = (
@@ -565,19 +558,17 @@ const formValidation = (e) => {
     addBtnPasswordVisibility(e.target);
 
     const validationContainer = e.target.parentElement.querySelector(
-        `.form-validation__error-${e.target.name}`,
+        `.form-validation__error--${e.target.name}`,
     );
     const tooltipContainer = document.querySelector(
-        `.form-validation__tooltip-${e.target.name}`,
+        `.form-validation__tooltip--${e.target.name}`,
     );
     const infoContainer = e.target.parentElement.querySelector(
-        `.form-validation__error--absolute-${e.target.name}`,
+        `.form-validation__error--absolute--${e.target.name}`,
     );
 
     validationContainer.textContent = "";
     validationContainer.classList.add("form-validation__hidden");
-
-    e.target.style.border = "2px green solid";
 
     if (e.target.name === "form-validation__password") {
         progressElement = e.target.nextElementSibling;
