@@ -1,0 +1,12 @@
+.splide__pagination button {
+  width: 30px;
+  height: 4px;
+  background-color: #727272;
+  border-radius: 20px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.splide__pagination .is-active {
+  transform: scale(1.2) !important;
+}

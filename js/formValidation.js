@@ -4,44 +4,96 @@ const formValidation = (e) => {
     };
 
     const addErrorContainerForFormElements = (inputElement) => {
-        if (inputElement.type === "password" || inputElement.type === "text" || inputElement.type === "email" || inputElement.type === "tel") {
+        if (
+            inputElement.type === "password" ||
+            inputElement.type === "text" ||
+            inputElement.type === "email" ||
+            inputElement.type === "tel"
+        ) {
             let checkErrorElement = true;
 
-            for (let i = 0; i < inputElement.parentElement.children.length; i++) {
-                if (inputElement.parentElement.children[i].classList.contains("err-all")) {
+            for (
+                let i = 0;
+                i < inputElement.parentElement.children.length;
+                i++
+            ) {
+                if (
+                    inputElement.parentElement.children[i].classList.contains(
+                        `form-validation__error--${inputElement.name}`,
+                    )
+                ) {
                     checkErrorElement = false;
                 }
             }
 
             if (checkErrorElement) {
-                inputElement.insertAdjacentHTML("afterend", `<div class='hidden err-all err-${inputElement.name}'></div>`);
+                inputElement.insertAdjacentHTML(
+                    "afterend",
+                    `<div class='form-validation__hidden form-validation__error--all form-validation__error--${inputElement.name}'></div>`,
+                );
             }
         }
     };
 
-    const addModalContainerForFormElements = (inputElement) => {
-        const modalElement = document.createElement("div");
-        modalElement.classList.add("hidden", "modal-all", `modal-${inputElement.name}`);
-        modalElement.id = `modal-${inputElement.name}`;
+    const addTooltipContainerForFormElements = (inputElement) => {
+        const tooltipElement = document.createElement("div");
+        tooltipElement.classList.add(
+            "form-validation__hidden",
+            "form-validation__tooltip--all",
+            `form-validation__tooltip--${inputElement.name}`,
+        );
+        tooltipElement.id = `form-validation__tooltip--${inputElement.name}`;
 
-        if ((inputElement.type === "password" || inputElement.type === "text" || inputElement.type === "email" || inputElement.type === "tel") && !document.getElementById(`modal-${inputElement.name}`)) {
-            inputElement.insertAdjacentHTML("afterend", `<div class="hidden err-absolute err-absolute-${inputElement.name}"></div>`);
-            inputElement.insertAdjacentElement("afterend", modalElement);
+        if (
+            (inputElement.type === "password" ||
+                inputElement.type === "text" ||
+                inputElement.type === "email" ||
+                inputElement.type === "tel") &&
+            !document.getElementById(
+                `form-validation__tooltip--${inputElement.name}`,
+            )
+        ) {
+            inputElement.insertAdjacentHTML(
+                "afterend",
+                `<div class="form-validation__hidden form-validation__error--absolute form-validation__error--absolute--${inputElement.name}"></div>`,
+            );
+            inputElement.insertAdjacentElement("afterend", tooltipElement);
         }
     };
 
     const addStrengthIndicatorForPassword = (inputElement) => {
-        if (inputElement.type === "password" && !inputElement.nextElementSibling.classList.contains("progress-all") && !(inputElement.name === "confirm-password")) {
-            inputElement.insertAdjacentHTML("afterend", `<progress value="0" max="100" class='progress-all progress-${inputElement.name}'></progress>`);
+        if (
+            inputElement.type === "password" &&
+            !inputElement.nextElementSibling.classList.contains(
+                "form-validation__progress--all",
+            ) &&
+            !(inputElement.name === "form-validation__password--confirm")
+        ) {
+            inputElement.insertAdjacentHTML(
+                "afterend",
+                `<progress value="0" max="100" class='form-validation__progress--all class='form-validation__progress--${inputElement.name}'></progress>`,
+            );
         }
     };
 
     const addBtnPasswordVisibility = (inputElement) => {
         const btnElement = document.createElement("div");
 
-        btnElement.classList.add("visibility-all", "btn-visibility", `btn-${inputElement.name}`);
-        
-        if (inputElement.type === "password" && !(inputElement.previousElementSibling && inputElement.previousElementSibling.classList.contains("visibility-all"))) {
+        btnElement.classList.add(
+            "form-validation__visibility--all",
+            "form-validation__btn--visibility",
+            `form-validation__btn--${inputElement.name}`,
+        );
+
+        if (
+            inputElement.type === "password" &&
+            !(
+                inputElement.previousElementSibling &&
+                inputElement.previousElementSibling.classList.contains(
+                    "form-validation__visibility--all",
+                )
+            )
+        ) {
             inputElement.insertAdjacentElement("beforebegin", btnElement);
 
             btnElement.addEventListener("click", (e) => {
@@ -49,205 +101,384 @@ const formValidation = (e) => {
             });
         }
     };
-    
+
     const togglePasswordVisibility = (e, input) => {
         if (input.type === "password") {
-            e.target.classList.add("visibility-all-off");
-            e.target.classList.remove("visibility-all");
+            e.target.classList.add("form-validation__visibility--all--off");
+            e.target.classList.remove("form-validation__visibility--all");
             input.setAttribute("type", "text");
         } else {
-            e.target.classList.add("visibility-all");
-            e.target.classList.remove("visibility-all-off");
+            e.target.classList.add("form-validation__visibility--all");
+            e.target.classList.remove("form-validation__visibility--all--off");
             input.setAttribute("type", "password");
         }
-    }
-
-    const showModalMessage = (message, modalContainer) => {
-        modalContainer.classList.remove("hidden");
-
-        modalContainer.style.top = `${window.scrollY - modalContainer.offsetHeight - 10}px`;
-
-        modalContainer.textContent = message;
     };
 
-    const hideModalMessage = (modalContainer) => {
-        modalContainer.classList.add("hidden");
+    const showTooltipMessage = (message, tooltipContainer) => {
+        tooltipContainer.classList.remove("form-validation__hidden");
+
+        tooltipContainer.textContent = message;
     };
 
-    const showAbsoluteMessage = (input, container, modalContainer) => {
+    const hideTooltipMessage = (tooltipContainer) => {
+        tooltipContainer.classList.add("form-validation__hidden");
+    };
+
+    const showAbsoluteMessage = (input, container, tooltipContainer) => {
         let message = "";
-        
-        container.classList.remove("hidden");
-        container.classList.add("err-absolute");
 
-        switch(input.type) {
+        container.classList.remove("form-validation__hidden");
+        container.classList.add("form-validation__error--absolute");
+
+        switch (input.type) {
             case "password":
-                message = "Requires at least one uppercase letter, one lowercase letter, one digit, and one special character. Minimum 20 characters required"
+                message =
+                    "Requires at least one uppercase letter, one lowercase letter, one digit, and one special character. Minimum 20 characters required";
                 break;
             case "text":
-                message = "4-29 characters required. Must contain at least one letter"
+                message =
+                    "4-29 characters required. Must contain at least one letter";
                 break;
             case "email":
-                message = "Ensure a valid email format (e.g., example@example.com)"
+                message =
+                    "Ensure a valid email format (e.g., example@example.com)";
                 break;
             case "tel":
-                message = "Enter a valid phone number in international format (e.g., +1234567890)";
+                message =
+                    "Enter a valid phone number in international format (e.g., +1234567890)";
                 break;
         }
 
-        hideModalMessage(modalContainer);
+        hideTooltipMessage(tooltipContainer);
 
         container.addEventListener("mouseover", () => {
-            showModalMessage(message, modalContainer);
+            showTooltipMessage(message, tooltipContainer);
         });
         container.addEventListener("mouseout", () => {
-            hideModalMessage(modalContainer);
+            hideTooltipMessage(tooltipContainer);
         });
 
         input.addEventListener("input", () => {
             if (input.checkValidity()) {
-                container.classList.add("hidden");
+                container.classList.add("form-validation__hidden");
             }
         });
     };
-    
-    const showInlineMessage = (message, container, input, modalContainer, infoContainer) => {
-        container.classList.remove("hidden");
-        container.classList.add("err-inline");
-        
-        if (!(input.name === "confirm-password")) {
-            showAbsoluteMessage(input, infoContainer, modalContainer);
+
+    const showInlineMessage = (
+        message,
+        container,
+        input,
+        tooltipContainer,
+        infoContainer,
+    ) => {
+        container.classList.remove("form-validation__hidden");
+        container.classList.add("form-validation__error--inline");
+
+        if (!(input.name === "form-validation__password--confirm")) {
+            showAbsoluteMessage(input, infoContainer, tooltipContainer);
         }
-        
+
         container.textContent = message;
         container.style.width = `${input.offsetWidth}px`;
-
-        input.style.border =  "2px #ff0000 solid";
-        input.style.borderBottom =  "4px #ff0000 solid";
     };
 
-    const simpleValidation = (min = 1, max = 255, value, container, input, modalContainer, infoContainer, progressElement, isForm) => {
-        if (!isForm && input.name === "password") {
+    const simpleValidation = (
+        min = 1,
+        max = 255,
+        value,
+        container,
+        input,
+        tooltipContainer,
+        infoContainer,
+        progressElement,
+        isForm,
+    ) => {
+        if (!isForm && input.name === "form-validation__password") {
             strengthIndicatorPassword(progressElement, 25);
         }
-        
+
         if (value.trim() === "") {
-            isForm ? (input.isValid = false) : showInlineMessage("Empty input", container, input, modalContainer, infoContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "Empty input",
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
             return;
         }
 
         if (/\s/.test(value)) {
-            isForm ? (input.isValid = false) : showInlineMessage("Spaces are not allowed", container, input, modalContainer, infoContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "Spaces are not allowed",
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
             return;
         }
 
         if (value.length < min) {
-            isForm ? (input.isValid = false) : showInlineMessage(`Input should be at least ${min} characters long`, container, input, modalContainer, infoContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      `Input should be at least ${min} characters long`,
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
             return;
         }
 
         if (value.length > max) {
-            isForm ? (input.isValid = false) : showInlineMessage(`Input should be at most ${max} characters long`, container, input, modalContainer, infoContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      `Input should be at most ${max} characters long`,
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
             return;
         }
 
-        if (!isForm && input.name === "password") {
+        if (!isForm && input.name === "form-validation__password") {
             strengthIndicatorPassword(progressElement, 100);
         }
 
         return true;
     };
 
-    const validateUsername = (value, container, input, modalContainer, infoContainer, isForm) => {
+    const validateUsername = (
+        value,
+        container,
+        input,
+        tooltipContainer,
+        infoContainer,
+        isForm,
+    ) => {
         const params = [
             // {reg: /[0-9]/g, message: "Should contain at least one digit"},
-            {reg: /[A-Za-z]/g, message: "Should contain at least one letter"},
+            { reg: /[A-Za-z]/g, message: "Should contain at least one letter" },
         ];
 
-        if (!simpleValidation(4, 29, value, container, input, modalContainer, infoContainer, "", isForm)) {
+        if (
+            !simpleValidation(
+                4,
+                29,
+                value,
+                container,
+                input,
+                tooltipContainer,
+                infoContainer,
+                "",
+                isForm,
+            )
+        ) {
             return;
         }
-    
-        params.forEach(obj => {
-            const {reg, message} = obj;
-    
+
+        params.forEach((obj) => {
+            const { reg, message } = obj;
+
             if (!reg.test(value)) {
-                isForm ? (input.isValid = false) : showInlineMessage(message, container, input, modalContainer, infoContainer);
+                isForm
+                    ? (input.isValid = false)
+                    : showInlineMessage(
+                          message,
+                          container,
+                          input,
+                          tooltipContainer,
+                          infoContainer,
+                      );
             }
         });
-    }
+    };
 
-    const validateEmail = (value, container, input, modalContainer, infoContainer, isForm) => {
+    const validateEmail = (
+        value,
+        container,
+        input,
+        tooltipContainer,
+        infoContainer,
+        isForm,
+    ) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
         if (!emailRegex.test(value)) {
-            isForm ? (input.isValid = false) : showInlineMessage("Invalid email address", container, input, modalContainer, infoContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "Invalid email address",
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
         }
     };
 
-    const validatePhone = (value, container, input, modalContainer, infoContainer, isForm) => {
+    const validatePhone = (
+        value,
+        container,
+        input,
+        tooltipContainer,
+        infoContainer,
+        isForm,
+    ) => {
         const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-    
-        if (!simpleValidation(10, 15, value, container, input, modalContainer, infoContainer, "", isForm)) {
+
+        if (
+            !simpleValidation(
+                10,
+                15,
+                value,
+                container,
+                input,
+                tooltipContainer,
+                infoContainer,
+                "",
+                isForm,
+            )
+        ) {
             return;
         }
-    
+
         if (!phoneRegex.test(value)) {
-            isForm ? (input.isValid = false) : showInlineMessage("Invalid phone number", container, input, modalContainer, infoContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "Invalid phone number",
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
         }
     };
-    
-    
-    const validatePassword = async (value, usernameValue, container, input, modalContainer, progressElement, infoContainer, isForm) => {
+
+    const validatePassword = async (
+        value,
+        usernameValue,
+        container,
+        input,
+        tooltipContainer,
+        progressElement,
+        infoContainer,
+        isForm,
+    ) => {
         const params = [
-            {reg: /[^A-Za-z0-9\s]/g, message: "Should contain at least one special character"},
-            {reg: /[A-Z]/g, message: "Should contain at least one uppercase letter"},
-            {reg: /[0-9]/g, message: "Should contain at least one digit"},
-            {reg: /[a-z]/g, message: "Should contain at least one lowercase letter"},
+            {
+                reg: /[^A-Za-z0-9\s]/g,
+                message: "Should contain at least one special character",
+            },
+            {
+                reg: /[A-Z]/g,
+                message: "Should contain at least one uppercase letter",
+            },
+            { reg: /[0-9]/g, message: "Should contain at least one digit" },
+            {
+                reg: /[a-z]/g,
+                message: "Should contain at least one lowercase letter",
+            },
         ];
 
         if (value.includes(usernameValue) && usernameValue) {
-            isForm ? (input.isValid = false) : showInlineMessage("Password contain a username", container, input, modalContainer, infoContainer);
-            isForm ? (input.isValid = false) : strengthIndicatorPassword(progressElement, 50);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "Password contain a username",
+                      container,
+                      input,
+                      tooltipContainer,
+                      infoContainer,
+                  );
+            isForm
+                ? (input.isValid = false)
+                : strengthIndicatorPassword(progressElement, 50);
             return;
         }
 
-        if (!simpleValidation(20, 255, value, container, input, modalContainer, infoContainer, progressElement, isForm)) {
+        if (
+            !simpleValidation(
+                20,
+                255,
+                value,
+                container,
+                input,
+                tooltipContainer,
+                infoContainer,
+                progressElement,
+                isForm,
+            )
+        ) {
             return;
         }
-    
-        params.forEach(obj => {
-            const {reg, message} = obj;
-            
+
+        params.forEach((obj) => {
+            const { reg, message } = obj;
+
             if (!reg.test(value)) {
-                isForm ? (input.isValid = false) : strengthIndicatorPassword(progressElement, 75);
-                isForm ? (input.isValid = false) : showInlineMessage(message, container, input, modalContainer, infoContainer);
+                isForm
+                    ? (input.isValid = false)
+                    : strengthIndicatorPassword(progressElement, 75);
+                isForm
+                    ? (input.isValid = false)
+                    : showInlineMessage(
+                          message,
+                          container,
+                          input,
+                          tooltipContainer,
+                          infoContainer,
+                      );
             }
         });
     };
-    
-    const validateConfirmPassword = (value, passwordValue, container, input, modalContainer, isForm) => {
+
+    const validateConfirmPassword = (
+        value,
+        passwordValue,
+        container,
+        input,
+        tooltipContainer,
+        isForm,
+    ) => {
         if (value !== passwordValue || passwordValue.length < 1) {
-            isForm ? (input.isValid = false) : showInlineMessage("Passwords do not match", container, input, modalContainer);
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "Passwords do not match",
+                      container,
+                      input,
+                      tooltipContainer,
+                  );
         }
     };
 
     const strengthIndicatorPassword = (progressElement, progress) => {
-        progressElement.classList.remove("progress-red")
-        progressElement.classList.remove("progress-orange")
-        progressElement.classList.remove("progress-yellow")
-        progressElement.classList.remove("progress-green")
+        progressElement.classList.remove("form-validation__progress--red");
+        progressElement.classList.remove("form-validation__progress--orange");
+        progressElement.classList.remove("form-validation__progress--yellow");
+        progressElement.classList.remove("form-validation__progress--green");
 
         progressElement.value = progress;
 
         if (progress === 25) {
-            progressElement.classList.add("progress-red")
+            progressElement.classList.add("form-validation__progress--red");
         } else if (progress === 50) {
-            progressElement.classList.add("progress-orange")
+            progressElement.classList.add("form-validation__progress--orange");
         } else if (progress === 75) {
-            progressElement.classList.add("progress-yellow")
+            progressElement.classList.add("form-validation__progress--yellow");
         } else {
-            progressElement.classList.add("progress-green")
+            progressElement.classList.add("form-validation__progress--green");
         }
     };
 
@@ -262,26 +493,42 @@ const formValidation = (e) => {
 
         for (let index = 0; index < data.length; index++) {
             const [inputType, inputValue] = data[index];
-            const input = elementsFormNode.find(el => el.name === inputType);
+            const input = elementsFormNode.find((el) => el.name === inputType);
             input.isValid = true;
 
-            switch(inputType) {
-                case "username":
+            switch (inputType) {
+                case "form-validation__username":
                     checkUsername = inputValue;
                     validateUsername(inputValue, "", input, "", "", true);
                     break;
-                case "email":
+                case "form-validation__email":
                     validateEmail(inputValue, "", input, "", "", true);
                     break;
-                case "tel":
+                case "form-validation__tel":
                     validatePhone(inputValue, "", input, "", "", true);
-                    break;                    
-                case "password":
-                    checkPassValue = inputValue;
-                    validatePassword(inputValue, checkUsername, "", input, "", "", "", true);
                     break;
-                case "confirm-password":
-                    validateConfirmPassword(inputValue, checkPassValue, "", input, "", true);
+                case "form-validation__password":
+                    checkPassValue = inputValue;
+                    validatePassword(
+                        inputValue,
+                        checkUsername,
+                        "",
+                        input,
+                        "",
+                        "",
+                        "",
+                        true,
+                    );
+                    break;
+                case "form-validation__password--confirm":
+                    validateConfirmPassword(
+                        inputValue,
+                        checkPassValue,
+                        "",
+                        input,
+                        "",
+                        true,
+                    );
                     break;
             }
 
@@ -297,46 +544,91 @@ const formValidation = (e) => {
         return;
     }
 
-    let checkUsername = e.target.form.querySelector("[name='username']").value;
-    let checkPassValue = e.target.form.querySelector("[name='password']").value;
+    let checkUsername = e.target.form.querySelector(
+        "[name='form-validation__username']",
+    ).value;
+    let checkPassValue = e.target.form.querySelector(
+        "[name='form-validation__password']",
+    ).value;
     let progressElement = "";
 
     addErrorContainerForFormElements(e.target);
-    addModalContainerForFormElements(e.target);
+    addTooltipContainerForFormElements(e.target);
     addStrengthIndicatorForPassword(e.target);
     addBtnPasswordVisibility(e.target);
 
-    const validationContainer = e.target.parentElement.querySelector(`.err-${e.target.name}`);
-    const modalContainer = document.querySelector(`.modal-${e.target.name}`);
-    const infoContainer = e.target.parentElement.querySelector(`.err-absolute-${e.target.name}`);
+    const validationContainer = e.target.parentElement.querySelector(
+        `.form-validation__error--${e.target.name}`,
+    );
+    const tooltipContainer = document.querySelector(
+        `.form-validation__tooltip--${e.target.name}`,
+    );
+    const infoContainer = e.target.parentElement.querySelector(
+        `.form-validation__error--absolute--${e.target.name}`,
+    );
 
     validationContainer.textContent = "";
-    validationContainer.classList.add("hidden");
+    validationContainer.classList.add("form-validation__hidden");
 
-    e.target.style.border = "2px green solid";
-
-    if (e.target.name === "password") {
+    if (e.target.name === "form-validation__password") {
         progressElement = e.target.nextElementSibling;
     }
 
-    switch(e.target.name) {
-        case "username":
-            validateUsername(e.target.value, validationContainer, e.target, modalContainer, infoContainer, false);
+    switch (e.target.name) {
+        case "form-validation__username":
+            validateUsername(
+                e.target.value,
+                validationContainer,
+                e.target,
+                tooltipContainer,
+                infoContainer,
+                false,
+            );
             break;
-        case "email":
-            validateEmail(e.target.value, validationContainer, e.target, modalContainer, infoContainer, false);
+        case "form-validation__email":
+            validateEmail(
+                e.target.value,
+                validationContainer,
+                e.target,
+                tooltipContainer,
+                infoContainer,
+                false,
+            );
             break;
-        case "tel":
-            validatePhone(e.target.value, validationContainer, e.target, modalContainer, infoContainer, false);
+        case "form-validation__tel":
+            validatePhone(
+                e.target.value,
+                validationContainer,
+                e.target,
+                tooltipContainer,
+                infoContainer,
+                false,
+            );
             break;
-        case "password":
-            validatePassword(e.target.value, checkUsername, validationContainer, e.target, modalContainer, progressElement, infoContainer, false);
+        case "form-validation__password":
+            validatePassword(
+                e.target.value,
+                checkUsername,
+                validationContainer,
+                e.target,
+                tooltipContainer,
+                progressElement,
+                infoContainer,
+                false,
+            );
             break;
-        case "confirm-password":
-            validateConfirmPassword(e.target.value, checkPassValue, validationContainer, e.target, modalContainer, false);
+        case "form-validation__password--confirm":
+            validateConfirmPassword(
+                e.target.value,
+                checkPassValue,
+                validationContainer,
+                e.target,
+                tooltipContainer,
+                false,
+            );
             break;
     }
-}
+};
 
 const form = document.querySelector("form");
 
