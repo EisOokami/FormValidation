@@ -33,6 +33,33 @@ const formValidation = (e) => {
                 );
             }
         }
+
+        if (inputElement.type === "checkbox") {
+            let checkErrorElement = true;
+
+            for (
+                let i = 0;
+                i < inputElement.parentElement.parentElement.children.length;
+                i++
+            ) {
+                if (
+                    inputElement.parentElement.parentElement.children[
+                        i
+                    ].classList.contains(
+                        `form-validation__error--${inputElement.name}`,
+                    )
+                ) {
+                    checkErrorElement = false;
+                }
+            }
+
+            if (checkErrorElement) {
+                inputElement.parentElement.insertAdjacentHTML(
+                    "afterend",
+                    `<div class='form-validation__hidden form-validation__error--all form-validation__error--${inputElement.name}'></div>`,
+                );
+            }
+        }
     };
 
     const addTooltipContainerForFormElements = (inputElement) => {
@@ -175,12 +202,20 @@ const formValidation = (e) => {
         container.classList.remove("form-validation__hidden");
         container.classList.add("form-validation__error--inline");
 
-        if (!(input.name === "form-validation__password--confirm")) {
+        if (
+            !(
+                input.name === "form-validation__password--confirm" ||
+                input.name === "form-validation__required-checkbox"
+            )
+        ) {
             showAbsoluteMessage(input, infoContainer, tooltipContainer);
         }
 
         container.textContent = message;
-        container.style.width = `${input.offsetWidth}px`;
+
+        if (!(input.name === "form-validation__required-checkbox")) {
+            container.style.width = `${input.offsetWidth}px`;
+        }
     };
 
     const simpleValidation = (
@@ -365,7 +400,7 @@ const formValidation = (e) => {
         }
     };
 
-    const validatePassword = async (
+    const validatePassword = (
         value,
         usernameValue,
         container,
@@ -463,6 +498,19 @@ const formValidation = (e) => {
         }
     };
 
+    const validateCheckbox = (input, container, tooltipContainer, isForm) => {
+        if (!input.checked) {
+            isForm
+                ? (input.isValid = false)
+                : showInlineMessage(
+                      "This field is required",
+                      container,
+                      input,
+                      tooltipContainer,
+                  );
+        }
+    };
+
     const strengthIndicatorPassword = (progressElement, progress) => {
         progressElement.classList.remove("form-validation__progress--red");
         progressElement.classList.remove("form-validation__progress--orange");
@@ -530,6 +578,9 @@ const formValidation = (e) => {
                         true,
                     );
                     break;
+                case "form-validation__required-checkbox":
+                    validateCheckbox(input, "", true);
+                    break;
             }
 
             if (!input.isValid) {
@@ -557,15 +608,38 @@ const formValidation = (e) => {
     addStrengthIndicatorForPassword(e.target);
     addBtnPasswordVisibility(e.target);
 
-    const validationContainer = e.target.parentElement.querySelector(
-        `.form-validation__error--${e.target.name}`,
+    console.log(e.target);
+    console.log(e.target.parentElement);
+    console.log(e.target.parentElement.parentElement);
+    console.log(
+        e.target.parentElement.parentElement.classList.contains(
+            "form-validation__input--wrapper",
+        ),
     );
+
+    const validationContainer =
+        e.target.parentElement.parentElement.classList.contains(
+            "form-validation__input--wrapper",
+        )
+            ? e.target.parentElement.parentElement.querySelector(
+                  `.form-validation__error--${e.target.name}`,
+              )
+            : e.target.parentElement.querySelector(
+                  `.form-validation__error--${e.target.name}`,
+              );
     const tooltipContainer = document.querySelector(
         `.form-validation__tooltip--${e.target.name}`,
     );
-    const infoContainer = e.target.parentElement.querySelector(
-        `.form-validation__error--absolute--${e.target.name}`,
-    );
+    const infoContainer =
+        e.target.parentElement.parentElement.classList.contains(
+            "form-validation__input--wrapper",
+        )
+            ? e.target.parentElement.parentElement.querySelector(
+                  `.form-validation__error--absolute--${e.target.name}`,
+              )
+            : e.target.parentElement.querySelector(
+                  `.form-validation__error--absolute--${e.target.name}`,
+              );
 
     validationContainer.textContent = "";
     validationContainer.classList.add("form-validation__hidden");
@@ -623,6 +697,14 @@ const formValidation = (e) => {
                 checkPassValue,
                 validationContainer,
                 e.target,
+                tooltipContainer,
+                false,
+            );
+            break;
+        case "form-validation__required-checkbox":
+            validateCheckbox(
+                e.target,
+                validationContainer,
                 tooltipContainer,
                 false,
             );
