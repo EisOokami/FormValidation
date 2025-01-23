@@ -1,6 +1,32 @@
 const formValidation = (e) => {
     const serializeForm = (formNode) => {
-        return new FormData(formNode);
+        const inputsValidationUsername = document.querySelectorAll(
+            "input[name='form-validation__username']",
+        );
+        const inputsValidationEmail = document.querySelectorAll(
+            "input[name='form-validation__email']",
+        );
+        const inputsValidationTel = document.querySelectorAll(
+            "input[name='form-validation__tel']",
+        );
+        const inputsValidationPassword = document.querySelectorAll(
+            "input[name='form-validation__password']",
+        );
+        const inputsValidationPasswordConfirm = document.querySelectorAll(
+            "input[name='form-validation__password--confirm']",
+        );
+        const inputsValidationCheckbox = document.querySelectorAll(
+            "input[name='form-validation__required-checkbox']",
+        );
+
+        return [
+            ...inputsValidationUsername,
+            ...inputsValidationEmail,
+            ...inputsValidationTel,
+            ...inputsValidationPassword,
+            ...inputsValidationPasswordConfirm,
+            ...inputsValidationCheckbox,
+        ];
     };
 
     const addErrorContainerForFormElements = (inputElement) => {
@@ -533,62 +559,137 @@ const formValidation = (e) => {
     // ==============================================
 
     if (e.target.tagName === "FORM") {
-        const data = Array.from(serializeForm(e.target).entries());
+        // e.preventDefault();
+        const data = serializeForm(e.target);
         const elementsFormNode = [...e.target.elements];
         let checkUsername = "";
         let checkPassValue = "";
-        let isValidate = true;
+        let isValidateData = [];
+        let progressElement = "";
 
         for (let index = 0; index < data.length; index++) {
-            const [inputType, inputValue] = data[index];
-            const input = elementsFormNode.find((el) => el.name === inputType);
+            const currentInput = data[index];
+            const input = elementsFormNode.find(
+                (el) => el.name === currentInput.name,
+            );
+            const inputValue = input.value;
             input.isValid = true;
 
-            switch (inputType) {
+            addErrorContainerForFormElements(input);
+            addTooltipContainerForFormElements(input);
+            addStrengthIndicatorForPassword(input);
+            addBtnPasswordVisibility(input);
+
+            const validationContainer =
+                input.parentElement.parentElement.classList.contains(
+                    "form-validation__input--wrapper",
+                )
+                    ? input.parentElement.parentElement.querySelector(
+                          `.form-validation__error--${input.name}`,
+                      )
+                    : input.parentElement.querySelector(
+                          `.form-validation__error--${input.name}`,
+                      );
+            const tooltipContainer = document.querySelector(
+                `.form-validation__tooltip--${input.name}`,
+            );
+            const infoContainer =
+                input.parentElement.parentElement.classList.contains(
+                    "form-validation__input--wrapper",
+                )
+                    ? input.parentElement.parentElement.querySelector(
+                          `.form-validation__error--absolute--${input.name}`,
+                      )
+                    : input.parentElement.querySelector(
+                          `.form-validation__error--absolute--${input.name}`,
+                      );
+
+            validationContainer.textContent = "";
+            validationContainer.classList.add("form-validation__hidden");
+
+            if (input.name === "form-validation__password") {
+                progressElement = input.nextElementSibling;
+            }
+
+            switch (input.name) {
                 case "form-validation__username":
                     checkUsername = inputValue;
-                    validateUsername(inputValue, "", input, "", "", true);
+                    validateUsername(
+                        inputValue,
+                        validationContainer,
+                        input,
+                        tooltipContainer,
+                        infoContainer,
+                        false,
+                    );
                     break;
                 case "form-validation__email":
-                    validateEmail(inputValue, "", input, "", "", true);
+                    validateEmail(
+                        inputValue,
+                        validationContainer,
+                        input,
+                        tooltipContainer,
+                        infoContainer,
+                        false,
+                    );
                     break;
                 case "form-validation__tel":
-                    validatePhone(inputValue, "", input, "", "", true);
+                    validatePhone(
+                        inputValue,
+                        validationContainer,
+                        input,
+                        tooltipContainer,
+                        infoContainer,
+                        false,
+                    );
                     break;
                 case "form-validation__password":
                     checkPassValue = inputValue;
                     validatePassword(
                         inputValue,
                         checkUsername,
-                        "",
+                        validationContainer,
                         input,
-                        "",
-                        "",
-                        "",
-                        true,
+                        tooltipContainer,
+                        progressElement,
+                        infoContainer,
+                        false,
                     );
                     break;
                 case "form-validation__password--confirm":
                     validateConfirmPassword(
                         inputValue,
                         checkPassValue,
-                        "",
+                        validationContainer,
                         input,
-                        "",
-                        true,
+                        tooltipContainer,
+                        false,
                     );
                     break;
                 case "form-validation__required-checkbox":
-                    validateCheckbox(input, "", true);
+                    validateCheckbox(
+                        input,
+                        validationContainer,
+                        tooltipContainer,
+                        false,
+                    );
                     break;
             }
 
-            if (!input.isValid) {
-                isValidate = false;
+            if (
+                validationContainer.classList.contains(
+                    "form-validation__hidden",
+                )
+            ) {
+                isValidateData.push(true);
+            } else {
+                isValidateData.push(false);
             }
         }
 
-        if (!isValidate) {
+        const isValidate = isValidateData.includes(false);
+
+        if (isValidate) {
             e.preventDefault();
         }
 
@@ -607,15 +708,6 @@ const formValidation = (e) => {
     addTooltipContainerForFormElements(e.target);
     addStrengthIndicatorForPassword(e.target);
     addBtnPasswordVisibility(e.target);
-
-    console.log(e.target);
-    console.log(e.target.parentElement);
-    console.log(e.target.parentElement.parentElement);
-    console.log(
-        e.target.parentElement.parentElement.classList.contains(
-            "form-validation__input--wrapper",
-        ),
-    );
 
     const validationContainer =
         e.target.parentElement.parentElement.classList.contains(
